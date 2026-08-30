@@ -1,1 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NZN STUDY HUB V50</title>
 
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --red:#e50914;
+  --dark:#111318;
+  --card:#ffffff;
+  --text:#18202c;
+  --muted:#687386;
+  --gold:#f5b400;
+  --green:#16a34a;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f3f5f9;
+  color:var(--text);
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer;
+}
+
+.header{
+  background:linear-gradient(135deg,#b8000b,#ef1b26);
+  color:white;
+  padding:22px 16px;
+  box-shadow:0 4px 15px #0003;
+}
+
+.header-inner{
+  max-width:1000px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.logo span{
+  display:block;
+  font-size:12px;
+  opacity:.85;
+  letter-spacing:2px;
+  margin-top:3px;
+}
+
+.coins{
+  background:#fff;
+  color:#222;
+  border-radius:30px;
+  padding:9px 14px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.container{
+  width:min(1000px,94%);
+  margin:20px auto 50px;
+}
+
+.screen{
+  display:none;
+}
+
+.screen.active{
+  display:block;
+}
+
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow:0 4px 16px #17203312;
+  border:1px solid #e5e8ee;
+}
+
+.hero{
+  background:linear-gradient(135deg,#fff,#fff1f2);
+  text-align:center;
+  padding:30px 20px;
+}
+
+.hero h1{
+  margin:0 0 8px;
+  font-size:32px;
+}
+
+.hero p{
+  color:var(--muted);
+  line-height:1.5;
+}
+
+h2,h3{
+  margin-top:0;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.mode{
+  border:2px solid #e5e7eb;
+  border-radius:16px;
+  padding:18px;
+  background:white;
+  text-align:left;
+  transition:.15s;
+}
+
+.mode:hover{
+  transform:translateY(-2px);
+  border-color:var(--red);
+}
+
+.mode h3{
+  margin:0 0 7px;
+}
+
+.mode p{
+  color:var(--muted);
+  margin:0;
+  line-height:1.45;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 18px;
+  font-size:15px;
+  font-weight:bold;
+  background:var(--red);
+  color:white;
+  min-height:44px;
+}
+
+.btn:hover{
+  filter:brightness(.92);
+}
+
+.btn.secondary{
+  background:#e9edf3;
+  color:#202735;
+}
+
+.btn.green{
+  background:var(--green);
+}
+
+.btn.gold{
+  background:var(--gold);
+  color:#171717;
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin:14px 0 7px;
+}
+
+select,input{
+  width:100%;
+  padding:13px;
+  border:1px solid #ccd2dc;
+  border-radius:10px;
+  background:white;
+  font-size:16px;
+}
+
+.warning{
+  background:#fff7df;
+  border:1px solid #f1d47a;
+  color:#684d00;
+  padding:12px;
+  border-radius:12px;
+  line-height:1.45;
+  margin-top:12px;
+}
+
+.info{
+  background:#eef5ff;
+  border:1px solid #c9dcff;
+  padding:12px;
+  border-radius:12px;
+  line-height:1.45;
+}
+
+.question-number{
+  color:var(--red);
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.question{
+  font-size:22px;
+  font-weight:bold;
+  line-height:1.4;
+  margin-bottom:18px;
+}
+
+.option{
+  display:block;
+  width:100%;
+  text-align:left;
+  border:2px solid #e1e5eb;
+  background:#fff;
+  color:#18202c;
+  padding:14px;
+  border-radius:12px;
+  margin:9px 0;
+  font-size:16px;
+}
+
+.option:hover{
+  border-color:#e50914;
+}
+
+.option.correct{
+  border-color:#16a34a;
+  background:#ecfdf3;
+}
+
+.option.wrong{
+  border-color:#dc2626;
+  background:#fef2f2;
+}
+
+.option.disabled{
+  pointer-events:none;
+}
+
+.result{
+  padding:14px;
+  border-radius:12px;
+  margin-top:14px;
+  font-weight:bold;
+  display:none;
+}
+
+.result.show{
+  display:block;
+}
+
+.result.good{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.result.bad{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.progress{
+  height:10px;
+  background:#e5e7eb;
+  border-radius:20px;
+  overflow:hidden;
+  margin:10px 0 20px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:var(--red);
+  transition:.25s;
+}
+
+.badges{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.badge{
+  padding:16px;
+  border-radius:15px;
+  background:#fafafa;
+  border:2px solid #e5e7eb;
+}
+
+.badge.locked{
+  opacity:.45;
+  filter:grayscale(1);
+}
+
+.badge-icon{
+  font-size:30px;
+}
+
+.badge-name{
+  font-weight:bold;
+  margin-top:6px;
+}
+
+.rarity{
+  display:inline-block;
+  margin-top:6px;
+  padding:4px 8px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.common{background:#e5e7eb;color:#374151}
+.rare{background:#dbeafe;color:#1d4ed8}
+.epic{background:#ede9fe;color:#6d28d9}
+.legendary{background:#fef3c7;color:#92400e}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.stat{
+  background:#f8fafc;
+  border-radius:13px;
+  padding:14px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  margin-bottom:3px;
+}
+
+.small{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.center{
+  text-align:center;
+}
+
+.hidden{
+  display:none!important;
+}
+
+footer{
+  text-align:center;
+  color:#7b8493;
+  padding:20px;
+  font-size:13px;
+}
+
+@media(max-width:650px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .badges{
+    grid-template-columns:1fr;
+  }
+
+  .stat-grid{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .question{
+    font-size:19px;
+  }
+
+  .header-inner{
+    align-items:flex-start;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      🔴 NZN STUDY HUB
+      <span>LEARN • PLAY • ACHIEVE</span>
+    </div>
+    <div class="coins">🪙 <span id="coinDisplay">20</span> Coins</div>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ================= HOME ================= -->
+
+<section id="homeScreen" class="screen active">
+
+  <div class="card hero">
+    <h1>Welcome to NZN STUDY HUB V50</h1>
+    <p>
+      Test your knowledge, earn coins, unlock badges and improve your score.
+    </p>
+    <button class="btn" onclick="openClassConfirmation()">
+      🚀 START STUDY
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>🎮 Choose Your Challenge</h2>
+
+    <div class="grid">
+
+      <button class="mode" onclick="openClassConfirmation('foundation')">
+        <h3>📚 Foundation</h3>
+        <p>Classes 1–10. Questions are matched to the selected class.</p>
+      </button>
+
+      <button class="mode" onclick="openClassConfirmation('public')">
+        <h3>📝 Public Exam</h3>
+        <p>Exam-style practice with questions that are not repeated in the next match.</p>
+      </button>
+
+      <button class="mode" onclick="openClassConfirmation('jee')">
+        <h3>🚀 JEE</h3>
+        <p>JEE-style original practice questions.</p>
+      </button>
+
+      <button class="mode" onclick="openClassConfirmation('neet')">
+        <h3>🧬 NEET</h3>
+        <p>NEET-style original practice questions.</p>
+      </button>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏆 Your Progress</h2>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <strong id="statCoins">20</strong>
+        <span class="small">Coins</span>
+      </div>
+
+      <div class="stat">
+        <strong id="statScore">0</strong>
+        <span class="small">Correct</span>
+      </div>
+
+      <div class="stat">
+        <strong id="statBadges">0</strong>
+        <span class="small">Badges</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ================= CLASS CONFIRMATION ================= -->
+
+<section id="confirmScreen" class="screen">
+
+  <div class="card">
+    <h2>🎓 Confirm Your Class / Course</h2>
+
+    <div class="info">
+      Please select your actual class or entrance-exam course.
+      NZN STUDY HUB uses this to give you the appropriate level of questions.
+    </div>
+
+    <label for="classSelect">Your Class / Course</label>
+
+    <select id="classSelect" onchange="updateConfirmation()">
+      <option value="">-- Select --</option>
+
+      <optgroup label="Foundation">
+        <option value="class1">Class 1</option>
+        <option value="class2">Class 2</option>
+        <option value="class3">Class 3</option>
+        <option value="class4">Class 4</option>
+        <option value="class5">Class 5</option>
+        <option value="class6">Class 6</option>
+        <option value="class7">Class 7</option>
+        <option value="class8">Class 8</option>
+        <option value="class9">Class 9</option>
+        <option value="class10">Class 10</option>
+      </optgroup>
+
+      <optgroup label="Entrance Preparation">
+        <option value="jee">JEE</option>
+        <option value="neet">NEET</option>
+      </optgroup>
+    </select>
+
+    <div id="confirmMessage" class="warning hidden"></div>
+
+    <label>
+      <input type="checkbox" id="confirmCheckbox" style="width:auto">
+      I confirm that I selected my actual class/course.
+    </label>
+
+    <div class="actions">
+      <button class="btn secondary" onclick="showScreen('homeScreen')">
+        ← Back
+      </button>
+
+      <button class="btn" id="continueBtn" onclick="confirmClass()" disabled>
+        Continue →
+      </button>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboardScreen" class="screen">
+
+  <div class="card">
+    <h2 id="welcomeTitle">📚 Study Dashboard</h2>
+    <p id="levelText"></p>
+
+    <div class="grid">
+
+      <button class="mode" onclick="startMode('foundation')">
+        <h3>📚 Foundation</h3>
+        <p>Practice your selected class level.</p>
+      </button>
+
+      <button class="mode" onclick="startMode('public')">
+        <h3>📝 Public Exam</h3>
+        <p>Exam-style challenge.</p>
+      </button>
+
+      <button class="mode" id="jeeMode" onclick="startMode('jee')">
+        <h3>🚀 JEE</h3>
+        <p>JEE preparation.</p>
+      </button>
+
+      <button class="mode" id="neetMode" onclick="startMode('neet')">
+        <h3>🧬 NEET</h3>
+        <p>NEET preparation.</p>
+      </button>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏅 Badges</h2>
+    <div id="badgePreview" class="badges"></div>
+  </div>
+
+  <button class="btn secondary" onclick="showScreen('homeScreen')">
+    ← Home
+  </button>
+
+</section>
+
+
+<!-- ================= QUIZ ================= -->
+
+<section id="quizScreen" class="screen">
+
+  <div class="card">
+
+    <div class="question-number" id="questionNumber">
+      Question 1
+    </div>
+
+    <div id="quizModeLabel" class="small"></div>
+
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="question" id="questionText"></div>
+
+    <div id="options"></div>
+
+    <div id="answerResult" class="result"></div>
+
+    <div class="actions">
+
+      <button class="btn secondary" onclick="quitQuiz()">
+        Exit
+      </button>
+
+      <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>
+        Next →
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= RESULTS ================= -->
+
+<section id="resultScreen" class="screen">
+
+  <div class="card center">
+
+    <h1>🎉 Match Complete!</h1>
+
+    <p id="finalMessage"></p>
+
+    <div class="stat-grid">
+
+      <div class="stat">
+        <strong id="finalCorrect">0</strong>
+        <span class="small">Correct</span>
+      </div>
+
+      <div class="stat">
+        <strong id="finalCoins">0</strong>
+        <span class="small">Coins</span>
+      </div>
+
+      <div class="stat">
+        <strong id="finalPercent">0%</strong>
+        <span class="small">Score</span>
+      </div>
+
+    </div>
+
+    <div id="newBadgeMessage" class="info hidden" style="margin-top:15px"></div>
+
+    <div class="actions" style="justify-content:center">
+      <button class="btn" onclick="startMode(currentMode)">
+        🔄 Play Again
+      </button>
+
+      <button class="btn secondary" onclick="showScreen('dashboardScreen')">
+        Dashboard
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= BADGES ================= -->
+
+<section id="badgesScreen" class="screen">
+
+  <div class="card">
+
+    <h2>🏆 Badge Collection</h2>
+
+    <div id="allBadges" class="badges"></div>
+
+    <div class="actions">
+      <button class="btn secondary" onclick="showScreen('dashboardScreen')">
+        ← Dashboard
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  NZN STUDY HUB V50 • Keep learning 📚
+</footer>
+
+
+<script>
+/* =========================================================
+   NZN STUDY HUB V50
+   Everything is contained in this file.
+   ========================================================= */
+
+
+/* ================= STORAGE ================= */
+
+const STORAGE_KEY = "nznStudyHubV50";
+
+let saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+
+let state = {
+  coins: Number.isFinite(saved.coins) ? saved.coins : 20,
+  totalCorrect: Number.isFinite(saved.totalCorrect) ? saved.totalCorrect : 0,
+  totalQuestions: Number.isFinite(saved.totalQuestions) ? saved.totalQuestions : 0,
+  badges: Array.isArray(saved.badges) ? saved.badges : [],
+  usedQuestions: saved.usedQuestions || {},
+  selectedClass: saved.selectedClass || "",
+  publicUsed: Array.isArray(saved.publicUsed) ? saved.publicUsed : [],
+  jeeUsed: Array.isArray(saved.jeeUsed) ? saved.jeeUsed : [],
+  neetUsed: Array.isArray(saved.neetUsed) ? saved.neetUsed : []
+};
+
+function saveState(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+}
+
+function updateCoins(){
+  document.getElementById("coinDisplay").textContent=state.coins;
+  document.getElementById("statCoins").textContent=state.coins;
+  document.getElementById("statScore").textContent=state.totalCorrect;
+  document.getElementById("statBadges").textContent=state.badges.length;
+}
+
+
+/* ================= SCREEN CONTROL ================= */
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>{
+    s.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+
+/* ================= CLASS CONFIRMATION ================= */
+
+let requestedMode = "foundation";
+
+function openClassConfirmation(mode="foundation"){
+  requestedMode=mode;
+
+  document.getElementById("classSelect").value=state.selectedClass || "";
+
+  document.getElementById("confirmCheckbox").checked=false;
+
+  document.getElementById("continueBtn").disabled=true;
+
+  updateConfirmation();
+
+  showScreen("confirmScreen");
+}
+
+function updateConfirmation(){
+
+  const value=document.getElementById("classSelect").value;
+  const box=document.getElementById("confirmMessage");
+  const check=document.getElementById("confirmCheckbox");
+  const btn=document.getElementById("continueBtn");
+
+  box.classList.add("hidden");
+
+  if(!value){
+    btn.disabled=true;
+    return;
+  }
+
+  let message="";
+
+  if(requestedMode==="foundation"){
+
+    if(!value.startsWith("class")){
+      message="You selected an entrance course. Foundation requires a Class 1–10 selection.";
+    }else{
+      message="Foundation questions will be matched to "+formatClass(value)+".";
+    }
+
+  }else if(requestedMode==="jee"){
+
+    if(value!=="jee"){
+      message="JEE mode requires you to confirm JEE as your course. You cannot enter JEE mode using a lower school class.";
+    }else{
+      message="JEE mode selected. Questions will be JEE-style practice questions.";
+    }
+
+  }else if(requestedMode==="neet"){
+
+    if(value!=="neet"){
+      message="NEET mode requires you to confirm NEET as your course.";
+    }else{
+      message="NEET mode selected. Questions will be NEET-style practice questions.";
+    }
+
+  }else if(requestedMode==="public"){
+
+    if(!value.startsWith("class")){
+      message="Public Exam practice is available for Class 10 in this V50 version.";
+    }else if(value!=="class10"){
+      message="Public Exam practice in V50 is locked to Class 10 level.";
+    }else{
+      message="Class 10 Public Exam practice selected.";
+    }
+  }
+
+  if(message){
+    box.textContent=message;
+    box.classList.remove("hidden");
+  }
+
+  check.checked=false;
+  btn.disabled=true;
+}
+
+document.getElementById("confirmCheckbox").addEventListener("change",function(){
+
+  const value=document.getElementById("classSelect").value;
+
+  let allowed=false;
+
+  if(requestedMode==="foundation"){
+    allowed=value.startsWith("class");
+  }
+
+  if(requestedMode==="public"){
+    allowed=value==="class10";
+  }
+
+  if(requestedMode==="jee"){
+    allowed=value==="jee";
+  }
+
+  if(requestedMode==="neet"){
+    allowed=value==="neet";
+  }
+
+  document.getElementById("continueBtn").disabled=
+    !(this.checked && allowed);
+});
+
+
+function confirmClass(){
+
+  const value=document.getElementById("classSelect").value;
+
+  if(!value)return;
+
+  state.selectedClass=value;
+  saveState();
+
+  updateCoins();
+  updateDashboard();
+
+  showScreen("dashboardScreen");
+}
+
+function formatClass(value){
+
+  if(value==="jee")return"JEE";
+  if(value==="neet")return"NEET";
+
+  return value.replace("class","Class ");
+}
+
+
+/* ================= QUESTION DATA =================
+   These are original practice questions.
+   They are designed to match the general level,
+   rather than reproducing textbook questions.
+   ================================================== */
+
+
+/* ---------- FOUNDATION ---------- */
+
+const foundationQuestions={
+
+class1:[
+ {
+  q:"Which number comes after 7?",
+  options:["6","8","9","10"],
+  answer:1
+ },
+ {
+  q:"How many sides does a triangle have?",
+  options:["2","3","4","5"],
+  answer:1
+ },
+ {
+  q:"Which is the largest number?",
+  options:["3","8","5","2"],
+  answer:1
+ }
+],
+
+class2:[
+ {
+  q:"What is 7 + 5?",
+  options:["10","11","12","13"],
+  answer:2
+ },
+ {
+  q:"Which number is even?",
+  options:["7","9","12","15"],
+  answer:2
+ },
+ {
+  q:"How many months are there in one year?",
+  options:["10","11","12","13"],
+  answer:2
+ }
+],
+
+class3:[
+ {
+  q:"What is 8 × 4?",
+  options:["24","28","32","36"],
+  answer:2
+ },
+ {
+  q:"Which fraction represents one half?",
+  options:["1/3","1/2","2/3","3/4"],
+  answer:1
+ },
+ {
+  q:"What is 100 − 37?",
+  options:["53","63","73","67"],
+  answer:1
+ }
+],
+
+class4:[
+ {
+  q:"What is 25 × 4?",
+  options:["50","75","100","125"],
+  answer:2
+ },
+ {
+  q:"Which angle is smaller than a right angle?",
+  options:["Acute angle","Straight angle","Reflex angle","Full angle"],
+  answer:0
+ },
+ {
+  q:"What is 3/4 of 20?",
+  options:["10","12","15","18"],
+  answer:2
+ }
+],
+
+class5:[
+ {
+  q:"What is the place value of 6 in 46,215?",
+  options:["6","60","600","6000"],
+  answer:3
+ },
+ {
+  q:"Which planet is known for its prominent rings?",
+  options:["Earth","Mars","Saturn","Mercury"],
+  answer:2
+ },
+ {
+  q:"What is 2.5 + 1.75?",
+  options:["3.25","4.25","4.75","5.25"],
+  answer:1
+ }
+],
+
+class6:[
+ {
+  q:"Which integer is smaller?",
+  options:["−3","−1","2","5"],
+  answer:0
+ },
+ {
+  q:"What is the LCM of 4 and 6?",
+  options:["8","10","12","24"],
+  answer:2
+ },
+ {
+  q:"Which organ pumps blood around the human body?",
+  options:["Lung","Heart","Kidney","Stomach"],
+  answer:1
+ }
+],
+
+class7:[
+ {
+  q:"What is 15% of 200?",
+  options:["15","20","30","40"],
+  answer:2
+ },
+ {
+  q:"Which expression is equivalent to 3(x + 2)?",
+  options:["3x+2","3x+5","3x+6","x+6"],
+  answer:2
+ },
+ {
+  q:"Which gas is most abundant in Earth's atmosphere?",
+  options:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],
+  answer:1
+ }
+],
+
+class8:[
+ {
+  q:"Solve: 2x + 5 = 15.",
+  options:["3","5","7","10"],
+  answer:1
+ },
+ {
+  q:"The square root of 144 is:",
+  options:["10","11","12","14"],
+  answer:2
+ },
+ {
+  q:"Which cell structure controls many activities of the cell?",
+  options:["Cell wall","Nucleus","Vacuole","Cytoplasm"],
+  answer:1
+ }
+],
+
+class9:[
+ {
+  q:"If x = 4, what is x² + 3x?",
+  options:["16","20","28","32"],
+  answer:2
+ },
+ {
+  q:"The SI unit of force is:",
+  options:["Joule","Watt","Newton","Pascal"],
+  answer:2
+ },
+ {
+  q:"Which number is irrational?",
+  options:["4","0.5","√2","3/7"],
+  answer:2
+ }
+],
+
+class10:[
+ {
+  q:"If the roots of x² − 5x + 6 are α and β, what is α + β?",
+  options:["−5","5","6","−6"],
+  answer:1
+ },
+ {
+  q:"Which physical quantity is measured in ohms?",
+  options:["Current","Potential difference","Resistance","Power"],
+  answer:2
+ },
+ {
+  q:"Which process is responsible for the formation of gametes in organisms?",
+  options:["Mitosis","Meiosis","Binary fission","Budding"],
+  answer:1
+ }
+]
+
+};
+
+
+/* ---------- PUBLIC EXAM ---------- */
+
+const publicQuestions=[
+
+ {
+  id:"pub1",
+  q:"If the zeros of x² − 7x + 12 are α and β, what is αβ?",
+  options:["5","7","12","19"],
+  answer:2
+ },
+
+ {
+  id:"pub2",
+  q:"A current of 2 A flows through a resistance of 5 Ω. What is the potential difference?",
+  options:["2.5 V","7 V","10 V","25 V"],
+  answer:2
+ },
+
+ {
+  id:"pub3",
+  q:"Which part of the brain is mainly associated with balance and coordination?",
+  options:["Cerebrum","Cerebellum","Medulla","Hypothalamus"],
+  answer:1
+ },
+
+ {
+  id:"pub4",
+  q:"What is the probability of obtaining a head when a fair coin is tossed once?",
+  options:["0","1/4","1/2","1"],
+  answer:2
+ },
+
+ {
+  id:"pub5",
+  q:"Which type of reaction occurs when two or more substances combine to form one product?",
+  options:["Decomposition","Combination","Displacement","Double displacement"],
+  answer:1
+ },
+
+ {
+  id:"pub6",
+  q:"If tan θ = 1 and θ is an acute angle, θ is:",
+  options:["30°","45°","60°","90°"],
+  answer:1
+ },
+
+ {
+  id:"pub7",
+  q:"Which blood vessels carry blood away from the heart?",
+  options:["Veins","Arteries","Capillaries","Lymph vessels"],
+  answer:1
+ },
+
+ {
+  id:"pub8",
+  q:"The image formed by a plane mirror is generally:",
+  options:["Real and inverted","Virtual and erect","Real and erect","Virtual and inverted"],
+  answer:1
+ }
+
+];
+
+
+/* ---------- JEE ---------- */
+
+const jeeQuestions=[
+
+ {
+  id:"jee1",
+  q:"A particle moves with constant acceleration. Its velocity changes from 10 m/s to 30 m/s in 5 s. What is its acceleration?",
+  options:["2 m/s²","4 m/s²","5 m/s²","8 m/s²"],
+  answer:1
+ },
+
+ {
+  id:"jee2",
+  q:"If f(x)=x²−3x+2, the value of f(2) is:",
+  options:["0","1","2","4"],
+  answer:0
+ },
+
+ {
+  id:"jee3",
+  q:"For two perpendicular vectors A and B, the value of A·B is:",
+  options:["AB","−AB","0","A+B"],
+  answer:2
+ },
+
+ {
+  id:"jee4",
+  q:"The electronic configuration of an atom with atomic number 8 contains how many electrons in its outermost shell?",
+  options:["2","4","6","8"],
+  answer:2
+ },
+
+ {
+  id:"jee5",
+  q:"If the determinant |1 2; 3 4| is evaluated, the result is:",
+  options:["−2","2","4","10"],
+  answer:0
+ },
+
+ {
+  id:"jee6",
+  q:"A body is projected vertically upward with initial speed u. Ignoring air resistance, its acceleration during the upward journey is:",
+  options:["0","g upward","g downward","u downward"],
+  answer:2
+ }
+
+];
+
+
+/* ---------- NEET ---------- */
+
+const neetQuestions=[
+
+ {
+  id:"neet1",
+  q:"Which organelle is commonly called the powerhouse of the cell?",
+  options:["Ribosome","Mitochondrion","Golgi apparatus","Lysosome"],
+  answer:1
+ },
+
+ {
+  id:"neet2",
+  q:"Which molecule carries hereditary information in most organisms?",
+  options:["Protein","DNA","Glucose","ATP"],
+  answer:1
+ },
+
+ {
+  id:"neet3",
+  q:"The basic structural and functional unit of the nervous system is the:",
+  options:["Neuron","Nephron","Alveolus","Platelet"],
+  answer:0
+ },
+
+ {
+  id:"neet4",
+  q:"Which blood cells are primarily responsible for oxygen transport?",
+  options:["White blood cells","Red blood cells","Platelets","Plasma cells"],
+  answer:1
+ },
+
+ {
+  id:"neet5",
+  q:"Photosynthesis mainly takes place in which organelle?",
+  options:["Mitochondrion","Chloroplast","Nucleus","Ribosome"],
+  answer:1
+ },
+
+ {
+  id:"neet6",
+  q:"Which hormone helps regulate blood glucose by promoting glucose uptake and storage?",
+  options:["Insulin","Adrenaline","Thyroxine","Melatonin"],
+  answer:0
+ }
+
+];
+
+
+/* ================= QUIZ VARIABLES ================= */
+
+let currentMode="foundation";
+let quizQuestions=[];
+let currentQuestionIndex=0;
+let currentCorrect=0;
+let currentAnswered=false;
+
+
+/* ================= START MODE ================= */
+
+function startMode(mode){
+
+  const selected=state.selectedClass;
+
+  /* Hard restriction */
+
+  if(mode==="foundation" && !selected.startsWith("class")){
+    alert("Please confirm a Foundation Class 1–10 first.");
+    openClassConfirmation("foundation");
+    return;
+  }
+
+  if(mode==="public" && selected!=="class10"){
+    alert("Public Exam practice in V50 is available for Class 10. Please confirm Class 10.");
+    openClassConfirmation("public");
+    return;
+  }
+
+  if(mode==="jee" && selected!=="jee"){
+    alert("JEE mode requires JEE course confirmation.");
+    openClassConfirmation("jee");
+    return;
+  }
+
+  if(mode==="neet" && selected!=="neet"){
+    alert("NEET mode requires NEET course confirmation.");
+    openClassConfirmation("neet");
+    return;
+  }
+
+  currentMode=mode;
+  currentQuestionIndex=0;
+  currentCorrect=0;
+  currentAnswered=false;
+
+  if(mode==="foundation"){
+
+    quizQuestions=
+      [...foundationQuestions[selected]]
+      .sort(()=>Math.random()-.5);
+
+  }else if(mode==="public"){
+
+    quizQuestions=getUnusedQuestions(
+      publicQuestions,
+      state.publicUsed
+    );
+
+  }else if(mode==="jee"){
+
+    quizQuestions=getUnusedQuestions(
+      jeeQuestions,
+      state.jeeUsed
+    );
+
+  }else if(mode==="neet"){
+
+    quizQuestions=getUnusedQuestions(
+      neetQuestions,
+      state.neetUsed
+    );
+
+  }
+
+  /* Always 3 questions per match */
+
+  quizQuestions=quizQuestions.slice(0,3);
+
+  if(quizQuestions.length===0){
+
+    alert("All questions in this set have been used. The question pool will now refresh for a new cycle.");
+
+    if(mode==="public")state.publicUsed=[];
+    if(mode==="jee")state.jeeUsed=[];
+    if(mode==="neet")state.neetUsed=[];
+
+    saveState();
+
+    startMode(mode);
+    return;
+  }
+
+  showScreen("quizScreen");
+  renderQuestion();
+}
+
+
+/* ================= NON-REPEAT SYSTEM ================= */
+
+function getUnusedQuestions(all,used){
+
+  let available=all.filter(q=>!used.includes(q.id));
+
+  /*
+    If fewer than 3 remain, use the remaining ones.
+    Once the pool is exhausted, the next match resets
+    the cycle instead of repeating immediately.
+  */
+
+  if(available.length===0){
+    return [];
+  }
+
+  return available.sort(()=>Math.random()-.5);
+}
+
+
+/* ================= RENDER QUESTION ================= */
+
+function renderQuestion(){
+
+  const q=quizQuestions[currentQuestionIndex];
+
+  currentAnswered=false;
+
+  document.getElementById("questionNumber").textContent=
+    "Question "+(currentQuestionIndex+1)+" of "+quizQuestions.length;
+
+  document.getElementById("quizModeLabel").textContent=
+    getModeLabel();
+
+  document.getElementById("questionText").textContent=q.q;
+
+  const progress=
+    ((currentQuestionIndex)/quizQuestions.length)*100;
+
+  document.getElementById("progressBar").style.width=
+    progress+"%";
+
+  const options=document.getElementById("options");
+
+  options.innerHTML="";
+
+  q.options.forEach((option,index)=>{
+
+    const button=document.createElement("button");
+
+    button.className="option";
+    button.textContent=
+      String.fromCharCode(65+index)+". "+option;
+
+    button.onclick=()=>checkAnswer(index,button);
+
+    options.appendChild(button);
+  });
+
+  const result=document.getElementById("answerResult");
+
+  result.className="result";
+  result.textContent="";
+
+  document.getElementById("nextBtn").disabled=true;
+}
+
+
+/* ================= ANSWER ================= */
+
+function checkAnswer(selected,clickedButton){
+
+  if(currentAnswered)return;
+
+  currentAnswered=true;
+
+  const q=quizQuestions[currentQuestionIndex];
+
+  const buttons=document.querySelectorAll(".option");
+
+  buttons.forEach((button,index)=>{
+
+    button.classList.add("disabled");
+
+    if(index===q.answer){
+      button.classList.add("correct");
+    }
+
+  });
+
+  const result=document.getElementById("answerResult");
+
+  if(selected===q.answer){
+
+    currentCorrect++;
+
+    state.totalCorrect++;
+    state.totalQuestions++;
+
+    /*
+      Correct answer = 1 coin.
+      No huge starting reward.
+    */
+
+    state.coins+=1;
+
+    result.textContent=
+      "✅ Correct! +1 coin";
+
+    result.className="result show good";
+
+  }else{
+
+    state.totalQuestions++;
+
+    result.textContent=
+      "❌ Not quite. The correct answer is "+
+      String.fromCharCode(65+q.answer)+". "+
+      q.options[q.answer];
+
+    result.className="result show bad";
+  }
+
+  markQuestionUsed(q);
+
+  saveState();
+  updateCoins();
+
+  document.getElementById("nextBtn").disabled=false;
+}
+
+
+/* ================= MARK USED ================= */
+
+function markQuestionUsed(q){
+
+  if(currentMode==="public"){
+
+    if(!state.publicUsed.includes(q.id)){
+      state.publicUsed.push(q.id);
+    }
+
+  }else if(currentMode==="jee"){
+
+    if(!state.jeeUsed.includes(q.id)){
+      state.jeeUsed.push(q.id);
+    }
+
+  }else if(currentMode==="neet"){
+
+    if(!state.neetUsed.includes(q.id)){
+      state.neetUsed.push(q.id);
+    }
+  }
+
+  saveState();
+}
+
+
+/* ================= NEXT ================= */
+
+function nextQuestion(){
+
+  if(!currentAnswered)return;
+
+  currentQuestionIndex++;
+
+  if(currentQuestionIndex>=quizQuestions.length){
+
+    finishQuiz();
+
+  }else{
+
+    renderQuestion();
+  }
+}
+
+
+/* ================= FINISH ================= */
+
+function finishQuiz(){
+
+  const total=quizQuestions.length;
+
+  const percentage=
+    Math.round((currentCorrect/total)*100);
+
+  checkBadges();
+
+  document.getElementById("finalCorrect").textContent=
+    currentCorrect+"/"+total;
+
+  document.getElementById("finalCoins").textContent=
+    state.coins;
+
+  document.getElementById("finalPercent").textContent=
+    percentage+"%";
+
+  let message="";
+
+  if(percentage===100){
+    message="🔥 Perfect match! Excellent work!";
+  }else if(percentage>=66){
+    message="👏 Great job! Keep improving.";
+  }else if(percentage>=33){
+    message="📚 Good attempt. Practice a little more.";
+  }else{
+    message="💪 Keep studying. Your next match can be better!";
+  }
+
+  document.getElementById("finalMessage").textContent=message;
+
+  showScreen("resultScreen");
+}
+
+
+/* ================= EXIT ================= */
+
+function quitQuiz(){
+
+  if(confirm("Exit this match? Your completed answers are already saved.")){
+    updateDashboard();
+    showScreen("dashboardScreen");
+  }
+}
+
+
+/* ================= BADGES ================= */
+
+const badgeList=[
+
+ {
+  id:"first",
+  icon:"🌱",
+  name:"First Step",
+  rarity:"COMMON",
+  cls:"common",
+  description:"Complete your first question."
+ },
+
+ {
+  id:"five",
+  icon:"⭐",
+  name:"Rising Star",
+  rarity:"COMMON",
+  cls:"common",
+  description:"Answer 5 questions correctly."
+ },
+
+ {
+  id:"ten",
+  icon:"🎯",
+  name:"Sharp Mind",
+  rarity:"RARE",
+  cls:"rare",
+  description:"Answer 10 questions correctly."
+ },
+
+ {
+  id:"twentyfive",
+  icon:"💎",
+  name:"Knowledge Hunter",
+  rarity:"RARE",
+  cls:"rare",
+  description:"Answer 25 questions correctly."
+ },
+
+ {
+  id:"perfect",
+  icon:"🔥",
+  name:"Perfect Match",
+  rarity:"EPIC",
+  cls:"epic",
+  description:"Get 100% in a match."
+ },
+
+ {
+  id:"fifty",
+  icon:"👑",
+  name:"Study Champion",
+  rarity:"EPIC",
+  cls:"epic",
+  description:"Answer 50 questions correctly."
+ },
+
+ {
+  id:"hundred",
+  icon:"🏆",
+  name:"NZN Legend",
+  rarity:"LEGENDARY",
+  cls:"legendary",
+  description:"Answer 100 questions correctly."
+ }
+
+];
+
+
+function checkBadges(){
+
+  let earnedNow=[];
+
+  if(state.totalQuestions>=1){
+    earnBadge("first",earnedNow);
+  }
+
+  if(state.totalCorrect>=5){
+    earnBadge("five",earnedNow);
+  }
+
+  if(state.totalCorrect>=10){
+    earnBadge("ten",earnedNow);
+  }
+
+  if(state.totalCorrect>=25){
+    earnBadge("twentyfive",earnedNow);
+  }
+
+  if(currentCorrect===quizQuestions.length){
+    earnBadge("perfect",earnedNow);
+  }
+
+  if(state.totalCorrect>=50){
+    earnBadge("fifty",earnedNow);
+  }
+
+  if(state.totalCorrect>=100){
+    earnBadge("hundred",earnedNow);
+  }
+
+  const box=document.getElementById("newBadgeMessage");
+
+  if(earnedNow.length){
+
+    box.textContent=
+      "🏆 New badge unlocked: "+
+      earnedNow.join(", ");
+
+    box.classList.remove("hidden");
+
+  }else{
+
+    box.classList.add("hidden");
+  }
+
+  updateBadgeDisplays();
+  saveState();
+}
+
+
+function earnBadge(id,earnedNow){
+
+  if(!state.badges.includes(id)){
+
+    state.badges.push(id);
+
+    const badge=
+      badgeList.find(b=>b.id===id);
+
+    if(badge){
+      earnedNow.push(badge.name);
+    }
+  }
+}
+
+
+function updateBadgeDisplays(){
+
+  const containers=[
+    document.getElementById("badgePreview"),
+    document.getElementById("allBadges")
+  ];
+
+  containers.forEach(container=>{
+
+    if(!container)return;
+
+    container.innerHTML="";
+
+    badgeList.forEach(b=>{
+
+      const unlocked=
+        state.badges.includes(b.id);
+
+      const div=document.createElement("div");
+
+      div.className=
+        "badge "+(unlocked?"":"locked");
+
+      div.innerHTML=`
+        <div class="badge-icon">${b.icon}</div>
+        <div class="badge-name">${b.name}</div>
+        <span class="rarity ${b.cls}">
+          ${b.rarity}
+        </span>
+        <div class="small" style="margin-top:8px">
+          ${b.description}
+        </div>
+      `;
+
+      container.appendChild(div);
+    });
+  });
+
+  updateCoins();
+}
+
+
+/* ================= DASHBOARD ================= */
+
+function updateDashboard(){
+
+  const selected=state.selectedClass;
+
+  document.getElementById("welcomeTitle").textContent=
+    "👋 Welcome, "+formatClass(selected);
+
+  document.getElementById("levelText").textContent=
+    "Your confirmed level: "+formatClass(selected);
+
+  /*
+    Do not allow JEE/NEET to be selected by school students.
+  */
+
+  document.getElementById("jeeMode").style.display=
+    selected==="jee"?"block":"none";
+
+  document.getElementById("neetMode").style.display=
+    selected==="neet"?"block":"none";
+
+  updateBadgeDisplays();
+  updateCoins();
+}
+
+
+/* ================= MODE LABEL ================= */
+
+function getModeLabel(){
+
+  if(currentMode==="foundation"){
+    return "📚 Foundation • "+formatClass(state.selectedClass);
+  }
+
+  if(currentMode==="public"){
+    return "📝 Class 10 Public Exam";
+  }
+
+  if(currentMode==="jee"){
+    return "🚀 JEE Practice";
+  }
+
+  if(currentMode==="neet"){
+    return "🧬 NEET Practice";
+  }
+
+  return "";
+}
+
+
+/* ================= INITIALIZE ================= */
+
+function initialize(){
+
+  updateCoins();
+  updateBadgeDisplays();
+
+  if(state.selectedClass){
+    updateDashboard();
+  }
+
+}
+
+initialize();
+
+</script>
+
+</body>
+  </html>
